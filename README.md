@@ -1,77 +1,81 @@
-# React + TypeScript + Vite
+# 💻 AccountManagerWeb — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-Currently, two official plugins are available:
+**AccountManagerWeb** es la interfaz de usuario (Frontend) para la plataforma de gestión de cuentas y usuarios. Está construida sobre **React 19** con **TypeScript**, ofreciendo una experiencia de usuario rápida, reactiva y totalmente tipada.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+La aplicación consume y se conecta con el servicio backend **[AccountManagerAPI](https://github.com/abraham1405/AccountManagerAPI)** desarrollado en **.NET**, gestionando la autenticación basada en tokens JWT, la administración del perfil y los flujos de recuperación de contraseñas.
 
-## React Compiler
+---
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## 🚀 Funcionalidades Principalmente Cubiertas
 
-Note: This will impact Vite dev & build performances.
+* 🔒 **Autenticación e Inicio de Sesión**: Formulario de login con almacenamiento seguro del token JWT retornado por la API.
+* 📝 **Registro de Usuarios (`RegisterView`)**: Creación de cuentas de usuario con validación en tiempo real.
+* 📧 **Restablecimiento y Recuperación de Clave**:
+  * Formulario para solicitar correo de recuperación.
+  * Vista de cambio de contraseña conectada a las rutas del backend (`AskForPasswordResetAsync` / `ChangePasswordAsync`).
+* 👤 **Área Privada y Perfil (`ProfileView`)**: Panel protegido para ver y editar información del usuario, así como actualizar la contraseña.
+* 🛡️ **Rutas Protegidas (`Protected Routes`)**: Bloqueo automático de vistas privadas para usuarios no autenticados o con tokens expirados.
+* ⚡ **Manejo Centralizado de Peticiones**: Cliente de Axios configurado con interceptores para enviar el encabezado `Authorization: Bearer <token>` y gestionar la expiración de sesión (errores 401/403).
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🔗 Integración con el Backend (.NET API)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Este proyecto **no almacena ni procesa la lógica de negocio directamente**, sino que actúa como el cliente web que interactúa con el repositorio backend:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+👉 **Repositorio Backend:** [AccountManagerAPI](https://github.com/abraham1405/AccountManagerAPI)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Endpoints Principales Consumidos:
 
-```
+| Módulo | Método | Endpoint Backend | Descripción en Frontend |
+| :--- | :--- | :--- | :--- |
+| **Auth** | `POST` | `/api/auth/login` | Autentica al usuario y guarda el token JWT. |
+| **Auth** | `POST` | `/api/auth/register` | Envía los datos del formulario de registro. |
+| **Auth** | `POST` | `/api/auth/forgot-password` | Inicia el flujo de recuperación de clave enviando un email. |
+| **Auth** | `POST` | `/api/auth/reset-password` | Envía la nueva clave junto con el token de verificación. |
+| **Usuario** | `GET` | `/api/user/profile` | Obtiene la información del perfil autenticado. |
+| **Usuario** | `PUT` | `/api/user/profile` | Actualiza los datos del perfil o contraseña. |
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🛠️ Tecnologías y Librerías
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+* **Core:** React 19, TypeScript, Vite
+* **Enrutamiento:** React Router Dom (v6+)
+* **Peticiones HTTP:** Axios (con interceptores)
+* **Gestión de Formulario & Validaciones:** Formik / React Hook Form y Zod / Yup *(según la implementación)*
+* **Estilos:** Tailwind CSS / CSS Modules
 
-```
+---
+
+## 📁 Estructura del Proyecto
+
+```text
+AccountManagerWeb/
+├── public/                 # Recursos estáticos
+├── src/
+│   ├── assets/             # Imágenes, íconos y estilos globales
+│   ├── components/         # Componentes reutilizables (Botones, Inputs, Navbars, Modales)
+│   ├── context/            # AuthContext / Estado global de la sesión
+│   ├── hooks/              # Custom hooks (e.g., useAuth)
+│   ├── routes/             # Configuración de React Router y ProtectedRoutes
+│   ├── services/           # Configuración de Axios, Interceptores y llamadas API
+│   │   ├── api.ts          # Instancia base de Axios con URL dinámica
+│   │   ├── authService.ts  # Métodos de login, registro, reset password
+│   │   └── userService.ts  # Métodos para obtener y editar el perfil
+│   ├── views/              # Vistas/Páginas principales
+│   │   ├── LoginView.tsx
+│   │   ├── RegisterView.tsx
+│   │   ├── ForgotPasswordView.tsx
+│   │   ├── ResetPasswordView.tsx
+│   │   └── ProfileView.tsx
+│   ├── App.tsx             # Componente raíz y proveedores de contexto
+│   └── main.tsx            # Punto de entrada de Vite
+├── .env.example            # Plantilla de variables de entorno
+├── package.json
+└── tsconfig.json
