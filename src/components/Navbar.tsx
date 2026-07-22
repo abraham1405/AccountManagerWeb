@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { Link, useNavigate } from 'react-router';
+import { useAuth, type UserProfile } from '../context/AuthContext';
+import { Link, useNavigate } from 'react-router-dom';
 import { User, LogOut, Settings, LayoutDashboard } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
+  const [UserState] = useState<UserProfile>(user!);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ export const Navbar: React.FC = () => {
 
       <div className="flex items-center gap-4">
         <span className="text-sm text-slate-300 font-medium hidden sm:inline-flex items-center gap-1.5 bg-slate-900/50 px-3 py-1.5 rounded-full border border-slate-800">
-          Bienvenido, <strong className="text-sky-400 font-semibold">{user?.username || 'Usuario'}</strong>
+          Bienvenido, <strong className="text-sky-400 font-semibold">{UserState.userName || 'Usuario'}</strong>
           <User className="h-4 w-4 text-sky-400" />
         </span>
 
@@ -37,10 +38,9 @@ export const Navbar: React.FC = () => {
             onClick={() => setIsOpen(!isOpen)}
             className="flex items-center justify-center h-9 w-9 rounded-full bg-gradient-to-tr from-sky-500 to-indigo-500 text-white font-bold text-sm shadow-md hover:scale-105 transition-transform outline-none focus:ring-2 focus:ring-sky-500"
           >
-            {user?.username ? user.username.charAt(0).toUpperCase() : <User className="h-4 w-4" />}
+            {UserState.userName ? UserState.userName.charAt(0).toUpperCase() : <User className="h-4 w-4" />}
           </button>
 
-          {/* Menú Flotante */}
           {isOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-slate-900/95 backdrop-blur-xl border border-slate-800 rounded-xl shadow-2xl p-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
               <div className="px-3 py-2 text-xs text-slate-500 border-b border-slate-800 mb-1">

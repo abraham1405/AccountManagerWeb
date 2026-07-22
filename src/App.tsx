@@ -5,6 +5,9 @@ import { RegisterView } from "./views/RegisterView";
 import { HomeView } from "./views/HomeView";
 import { DashboardLayout } from "./components/DashboardLayout";
 import { ProfileView } from "./views/ProfileView";
+import { SenPasswordChangeEmailView } from "./views/SendPasswordChangeEmailView";
+import { VerifyCodeView } from "./views/VerifyCodeView";
+import { ResetPasswordView } from "./views/ResetPasswordView";
 
 const AppRoutes = () => {
   const { isAuthenticated, isLoadingUser } = useAuth();
@@ -18,7 +21,6 @@ const AppRoutes = () => {
   }
 
   return (
-    <BrowserRouter>
       <Routes>
         <Route
           path="/login"
@@ -38,6 +40,39 @@ const AppRoutes = () => {
           }
         />
 
+        <Route
+          path="/sendPasswordChangeEmail"
+          element={
+            !isAuthenticated ? (
+              <SenPasswordChangeEmailView />
+            ) : (
+              <Navigate to="/home" replace />
+            )
+          }
+        />
+
+        <Route
+          path="/VerifyCode"
+          element={
+            !isAuthenticated ? (
+              <VerifyCodeView />
+            ) : (
+              <Navigate to="/home" replace />
+            )
+          }
+        />
+
+        <Route
+          path="/ResetPassword"
+          element={
+            !isAuthenticated ? (
+              <ResetPasswordView />
+            ) : (
+              <Navigate to="/home" replace />
+            )
+          }
+        />
+
         <Route element={<DashboardLayout />}>
           <Route path="/home" element={<HomeView />} />
           <Route path="/profile" element={<ProfileView />} />
@@ -50,15 +85,16 @@ const AppRoutes = () => {
           }
         />
       </Routes>
-    </BrowserRouter>
   );
 };
 
 function App() {
   return (
-    <AuthProvider>
-      <AppRoutes />
-    </AuthProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 

@@ -4,6 +4,7 @@ import { Input } from "../components/Input";
 import { Button } from "../components/Button";
 import { useAuth } from "../context/AuthContext";
 import { apiAuth } from "../api/auth";
+import { Link } from "react-router-dom";
 
 export const LoginView: React.FC = () => {
   const { login } = useAuth();
@@ -114,12 +115,12 @@ export const LoginView: React.FC = () => {
               />
               <span>Recordarme</span>
             </label>
-            <a href="/register" className="hover:text-white transition-colors">
+            <Link to="/register" className="hover:text-white transition-colors">
               Crea una cuenta
-            </a>
-            <a href="#" className="hover:text-white transition-colors">
+            </Link>
+            <Link to="/sendPasswordChangeEmail" className="hover:text-white transition-colors">
               ¿Olvidaste tu contraseña?
-            </a>
+            </Link>
           </div>
 
           <Button type="submit" isLoading={isLoading}>

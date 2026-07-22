@@ -36,7 +36,7 @@ export const ProfileView: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleUpdateProfile = async (e: React.FormEvent) => {
+  const handleUpdateProfile = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setIsUpdatingUser(true);
     setSuccessMessage(null);
